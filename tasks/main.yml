@@ -1,0 +1,59 @@
+- name: prepare
+  tags: prepare
+  ansible.builtin.import_tasks: prepare.yml
+
+# - name: cleanup default docker packages for Astra
+#   tags: astra, cleanup
+#   ansible.builtin.import_tasks: cleanup/astra.yml
+#   when: "ansible_distribution in ('Astra Linux')"
+
+- name: cleanup default docker packages for Debian/Ubuntu
+  tags: debian, cleanup
+  ansible.builtin.import_tasks: cleanup/debian.yml
+  when: "ansible_distribution in ('Debian', 'Ubuntu')"
+
+- name: cleanup default docker packages for Oracle 7
+  tags: oracle, cleanup
+  ansible.builtin.import_tasks: cleanup/oracle-7.yml
+  when: >
+    ansible_distribution in ('OracleLinux', 'RedHat') and
+    ansible_distribution_major_version == '7'
+
+- name: cleanup default docker packages for Oracle 8
+  tags: oracle, cleanup
+  ansible.builtin.import_tasks: cleanup/oracle-8.yml
+  when: >
+    ansible_distribution in ('OracleLinux', 'RedHat') and
+    ansible_distribution_major_version == '8'
+
+- name: install docker for Astra
+  tags: debian, install
+  ansible.builtin.import_tasks: install/astra.yml
+  when: "ansible_distribution in ('Astra Linux')"
+
+- name: install docker for Debian/Ubuntu
+  tags: debian, install
+  ansible.builtin.import_tasks: install/debian.yml
+  when: "ansible_distribution in ('Debian', 'Ubuntu')"
+
+- name: install docker for Oracle 7
+  tags: oracle, install
+  ansible.builtin.import_tasks: install/oracle-7.yml
+  when: >
+    ansible_distribution in ('OracleLinux', 'RedHat') and
+    ansible_distribution_major_version == '7'
+
+- name: install docker for Oracle 8
+  tags: oracle, install
+  ansible.builtin.import_tasks: install/oracle-8.yml
+  when: >
+    ansible_distribution in ('OracleLinux', 'RedHat') and
+    ansible_distribution_major_version == '8'
+
+- name: set docker daemon.json
+  tags: configure
+  ansible.builtin.import_tasks: configure/daemon.json.yml
+
+- name: install docker-compose
+  tags: install, compose
+  ansible.builtin.import_tasks: install/compose.yml

@@ -1,0 +1,83 @@
+- name: set storage driver
+  ansible.builtin.set_fact:
+    _daemon_json: "{{ _daemon_json | combine({'storage-driver': '{{ role_docker_storage_driver }}'}) }}"
+  when: role_docker_storage_driver is defined and
+        role_docker_storage_driver | length > 0
+
+- name: set experimental
+  ansible.builtin.set_fact:
+    _daemon_json: "{{ _daemon_json | combine({'experimental': '{{ role_docker_experimental | bool }}'}) }}"
+  when: role_docker_experimental is defined
+
+- name: set max concurrent uploads
+  ansible.builtin.set_fact:
+    _daemon_json: "{{ _daemon_json | combine({'max-concurrent-uploads': '{{ role_docker_max_concurrent_uploads }}'}) }}"
+  when: role_docker_max_concurrent_uploads is defined
+
+- name: set metrics
+  ansible.builtin.set_fact:
+    _daemon_json: "{{ _daemon_json | combine({'metrics-addr': '{{ role_docker_metrics_addr }}'}) }}"
+  when: role_docker_metrics_addr is defined and
+        role_docker_metrics_addr | length > 0
+
+- name: set logging driver
+  ansible.builtin.set_fact:
+    _daemon_json: "{{ _daemon_json | combine({'log-driver': '{{ role_docker_logging_driver }}'}) }}"
+  when: role_docker_logging_driver is defined and
+        role_docker_logging_driver | length > 0
+
+- name: set logging opts
+  ansible.builtin.set_fact:
+    _daemon_json: "{{ _daemon_json | combine({'log-opts': '{{ role_docker_logging_opts }}'}) }}"
+  when: role_docker_logging_opts is defined and
+        role_docker_logging_opts | length > 0
+
+- name: set registry mirror
+  ansible.builtin.set_fact:
+    _daemon_json: "{{ _daemon_json | combine({'registry-mirrors': '{{ role_docker_registry_mirrors }}'}) }}"
+  when: role_docker_registry_mirrors is defined and
+       role_docker_registry_mirrors | length > 0
+
+- name: set insecure registry
+  ansible.builtin.set_fact:
+    _daemon_json: "{{ _daemon_json | combine({'insecure-registries': '{{ role_docker_insecure_registries }}'}) }}"
+  when: role_docker_insecure_registries is defined and
+       role_docker_insecure_registries | length > 0
+
+- name: set docker root directory
+  ansible.builtin.set_fact:
+    _daemon_json: "{{ _daemon_json | combine({'data-root': '{{ role_docker_data_dir_path }}'}) }}"
+  when: role_docker_data_dir_path is defined and
+        role_docker_data_dir_path | length > 0
+
+- name: set default address pools
+  ansible.builtin.include_tasks:
+    file: _/_add_default_address_pool.yml
+  loop:
+    "{{ role_docker_default_address_pools }}"
+  when: role_docker_default_address_pools is defined and
+        role_docker_default_address_pools | length > 0
+
+- name: set extra params
+  ansible.builtin.set_fact:
+    _daemon_json: "{{ _daemon_json | combine(role_docker_extra_params) }}"
+  when: role_docker_extra_params is defined
+
+- name: set docker daemon.json
+  tags: configure
+  ansible.builtin.template:
+    src: "{{ role_docker_config_src_template }}"
+    dest: "{{ role_docker_config_dir_path }}/{{ role_docker_config_dest_file_name }}"
+    owner: "{{ role_docker_config_file_owner }}"
+    group: "{{ role_docker_config_file_group }}"
+    mode: "{{ role_docker_config_file_mode }}"
+  when: _daemon_json is defined and
+        _daemon_json | length > 0
+  notify: "restart docker service"
+
+- name: drop empty daemon.json
+  ansible.builtin.file:
+    path: "{{ role_docker_config_dir_path }}/{{ role_docker_config_dest_file_name }}"
+    state: absent
+  when: _daemon_json is not defined or
+        _daemon_json | length == 0

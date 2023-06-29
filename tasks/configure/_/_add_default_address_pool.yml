@@ -1,0 +1,11 @@
+- name: create address pool
+  ansible.builtin.set_fact:
+    _default_address_pool:
+      'default-address-pools': "{{ [{'base': item.base, 'size': item.size}] }}"
+  when: item is defined and
+        item | length > 0
+
+- name: create _daemon_json var
+  ansible.builtin.set_fact: _daemon_json={{ _daemon_json | combine(_default_address_pool, list_merge='append') }}
+  when: _default_address_pool is defined and
+        _default_address_pool | length > 0

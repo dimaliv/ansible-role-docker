@@ -1,0 +1,30 @@
+- name: enable docker service
+  ansible.builtin.systemd:
+    name: docker
+    enabled: true
+    state: started
+  listen: "enable docker service"
+
+- name: start docker service
+  ansible.builtin.systemd:
+    name: docker
+    state: started
+  listen: "start docker service"
+
+- name: restart docker service
+  ansible.builtin.systemd:
+    name: docker
+    state: restarted
+  listen: "restart docker service"
+
+- name: cleanup apt packages
+  ansible.builtin.apt:
+    autoclean: true
+    autoremove: true
+  listen: "cleanup packages"
+  when: "ansible_distribution in ('Debian', 'Ubuntu', 'Astra Linux')"
+
+- name: cleanup yum packages
+  ansible.builtin.shell: yum clean all
+  listen: "cleanup packages"
+  when: "ansible_distribution in ('OracleLinux', 'RedHat')"

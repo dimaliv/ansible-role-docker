@@ -1,0 +1,14 @@
+- name: cleanup default docker packages
+  ansible.builtin.yum:
+    state: absent
+    name:
+      - docker
+      - docker-cli
+      - docker-client
+      - docker-client-latest
+      - docker-common
+      - docker-latest
+      - docker-latest-logrotate
+      - docker-logrotate
+      - docker-engine
+      - podman

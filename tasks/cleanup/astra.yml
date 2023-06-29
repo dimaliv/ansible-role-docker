@@ -1,0 +1,9 @@
+- name: cleanup default docker packages
+  ansible.builtin.apt:
+    state: absent
+    allow_change_held_packages: true
+    name:
+      - docker
+      - docker.io
+      - containerd
+      - runc

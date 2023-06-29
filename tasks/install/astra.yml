@@ -1,0 +1,17 @@
+- name: install docker v{{ role_docker_version }}
+  ansible.builtin.apt:
+    update_cache: true
+    force: true
+    allow_downgrade: true
+    pkg:
+      - docker.io={{ role_docker_version }}*
+  notify:
+    - "enable docker service"
+    - "restart docker service"
+    - "cleanup packages"
+
+- name: prevent docker from being upgraded
+  tags: configure
+  ansible.builtin.dpkg_selections:
+    name: docker.io
+    selection: hold

@@ -1,0 +1,33 @@
+---
+namespace: docker
+name: docker
+version: 0.1.0
+readme: README.md
+authors:
+  - "Livshits Dmitry (https://github.com/dimaliv)"
+description: "Ansible Collection for Docker"
+license_file: LICENSE
+tags:
+  - observability
+  - o11y
+  - monitoring
+  - prometheus
+  - metrics
+  - alerts
+  - alerting
+  - cloud
+dependencies:
+  community.general: '>=1.0.0'
+repository: "https://github.com/prometheus-community/ansible"
+documentation: "https://prometheus-community.github.io/ansible"
+homepage: "https://www.docker.com/"
+issues: "https://github.com/prometheus-community/ansible/issues"
+build_ignore:
+  - .config
+  - .github
+  - .gitignore
+  - changelogs
+  - roles/*/molecule
+  - tests
+  - '*test-requirements.txt'
+  - '*.tar.gz'
