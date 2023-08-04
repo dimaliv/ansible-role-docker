@@ -1,0 +1,24 @@
+image: ${DOCKER_COMMON_IMAGES}/gitlab-runner-docker:latest
+
+services:
+  - name: ${DOCKER_COMMON_IMAGES}/gitlab-runner-docker-dind:latest
+    alias: docker
+
+before_script:
+  - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" "$CI_REGISTRY" --password-stdin
+
+build_image:
+  stage: build
+  script:
+    - make target=build pull
+    - make target=build build
+    - make target=build push
+
+molecule_test:
+  stage: test
+  script:
+    - make target=build ci
+  parallel:
+    matrix:
+      - KAFKA_IMAGE_VERSION: "v0.1.0-3.4.1"
+      - KAFKA_IMAGE_VERSION: "v0.1.0-3.5.0"

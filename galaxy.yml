@@ -1,6 +1,6 @@
 ---
 namespace: docker
-name: docker
+name: docker2
 version: 0.1.0
 readme: README.md
 authors:
@@ -8,14 +8,8 @@ authors:
 description: "Ansible Collection for Docker"
 license_file: LICENSE
 tags:
-  - observability
-  - o11y
-  - monitoring
-  - prometheus
-  - metrics
-  - alerts
-  - alerting
-  - cloud
+  - docker
+  - docker-compose
 dependencies:
   community.general: '>=1.0.0'
 repository: "https://github.com/prometheus-community/ansible"

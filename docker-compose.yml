@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+  molecule:
+    build:
+      context: molecule
+      args:
+        ANSIBLE_VERSION: ${ANSIBLE_VERSION:-6.7.0}
+        MOLECULE_VERSION: ${MOLECULE_VERSION:-5.1.0}
+        MOLECULE_DOCKER_PLUGIN_VERESION: ${MOLECULE_DOCKER_PLUGIN_VERESION:-23.0.0}
+        BUILDKIT_INLINE_CACHE: ${BUILDKIT_INLINE_CACHE:-1}
+    working_dir: /docker
+    command: molecule test
+    volumes:
+      - ./:/docker
+      - /var/run/docker.sock:/var/run/docker.sock

@@ -1,10 +1,2 @@
-*.retry
-*.log
-
-.venv
-.molecule
-.cache
-.pytest_cache
-.tox
-
-__pycache__/
+.env.yml
+.env
