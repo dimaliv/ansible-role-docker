@@ -2,6 +2,7 @@ role_docker_version: "{{ undef(hint='You must specify docker version') }}"
 role_docker_compose_version: "{{ undef(hint='You must specify docker-compose version') }}"
 role_docker_compose_dest: "/usr/local/bin/docker-compose"
 role_docker_compose_mode: "0755"
+
 role_docker_compose_url: >-
   https://github.com/docker/compose/releases/download/{{ role_docker_compose_version }}/docker-compose-{{ ansible_system }}-{{ ansible_architecture }}
 

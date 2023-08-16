@@ -1,7 +1,7 @@
-image: ${DOCKER_COMMON_IMAGES}/gitlab-runner-docker:latest
+image: docker:stable
 
 services:
-  - name: ${DOCKER_COMMON_IMAGES}/gitlab-runner-docker-dind:latest
+  - name: docker:dind-stable
     alias: docker
 
 before_script:
@@ -17,8 +17,4 @@ build_image:
 molecule_test:
   stage: test
   script:
-    - make target=build ci
-  parallel:
-    matrix:
-      - KAFKA_IMAGE_VERSION: "v0.1.0-3.4.1"
-      - KAFKA_IMAGE_VERSION: "v0.1.0-3.5.0"
+    - make target=build test

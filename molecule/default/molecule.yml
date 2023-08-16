@@ -1,27 +1,19 @@
 ---
 dependency:
   name: galaxy
-  # options:
-  #   ignore-certs: True
-  #   ignore-errors: True
-  #   role-file: requirements.yml
-  #   requirements-file: collections.yml
 driver:
   name: docker
 platforms:
   - name: instance-1
-    image: debian:buster
+    image: debian:bullseye
     pre_build_image: false
-    dockerfile: ../docker/debian-buster/Dockerfile.j2
+    privileged: true
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    vars:
-      
 provisioner:
   name: ansible
   lint: |
     yamllint .
     ansible-lint .
-    flake8
 verifier:
   name: ansible

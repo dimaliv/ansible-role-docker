@@ -1,9 +1,9 @@
 ---
 galaxy_info:
-  author: Dmitry Livshits
   namespace: dimaliv
-  role_name: docker2
+  role_name: docker
   description: Install and config docker service.
+  author: Livshits Dmitry
   license: "license MIT"
   min_ansible_version: "2.7"
   platforms:

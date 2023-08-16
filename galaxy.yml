@@ -1,6 +1,6 @@
 ---
-namespace: docker
-name: docker2
+namespace: dimaliv
+name: docker
 version: 0.1.0
 readme: README.md
 authors:

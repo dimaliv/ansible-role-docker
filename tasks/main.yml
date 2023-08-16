@@ -2,11 +2,6 @@
   tags: prepare
   ansible.builtin.import_tasks: prepare.yml
 
-# - name: cleanup default docker packages for Astra
-#   tags: astra, cleanup
-#   ansible.builtin.import_tasks: cleanup/astra.yml
-#   when: "ansible_distribution in ('Astra Linux')"
-
 - name: cleanup default docker packages for Debian/Ubuntu
   tags: debian, cleanup
   ansible.builtin.import_tasks: cleanup/debian.yml
@@ -25,11 +20,6 @@
   when: >
     ansible_distribution in ('OracleLinux', 'RedHat') and
     ansible_distribution_major_version == '8'
-
-- name: install docker for Astra
-  tags: debian, install
-  ansible.builtin.import_tasks: install/astra.yml
-  when: "ansible_distribution in ('Astra Linux')"
 
 - name: install docker for Debian/Ubuntu
   tags: debian, install

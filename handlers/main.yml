@@ -22,7 +22,7 @@
     autoclean: true
     autoremove: true
   listen: "cleanup packages"
-  when: "ansible_distribution in ('Debian', 'Ubuntu', 'Astra Linux')"
+  when: "ansible_distribution in ('Debian', 'Ubuntu')"
 
 - name: cleanup yum packages
   ansible.builtin.shell: yum clean all
