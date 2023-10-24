@@ -1,4 +1,4 @@
-- name: add docker-compose v{{ role_docker_compose_version }}
+- name: compose | Add docker-compose v{{ role_docker_compose_version }}
   tags: docker-compose
   ansible.builtin.get_url:
     url: "{{ role_docker_compose_url }}"

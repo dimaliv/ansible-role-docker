@@ -1,0 +1,15 @@
+- name: debian-11 | Install python and pip dependencies
+  ansible.builtin.apt:
+    update_cache: "{{ role_docker_update_package_manager_cache | bool }}"
+    state: present
+    pkg:
+      - python3-pip
+      - python3-setuptools
+  notify: "cleanup packages"
+
+- name: debian-11 | Install python packages
+  tags: install,pip
+  ansible.builtin.pip:
+    name: "{{ role_docker_python_pip_requirements }}"
+  when: role_docker_python_pip_requirements is defined and
+        role_docker_python_pip_requirements | length > 0

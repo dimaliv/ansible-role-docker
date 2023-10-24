@@ -1,0 +1,28 @@
+driver:
+  name: docker
+platforms:
+  - name: oraclelinux_8_8
+    image: oraclelinux:8.8
+    pre_build_image: true
+    privileged: true
+    command: "/sbin/init"
+  - name: oraclelinux_7_9
+    image: oraclelinux:7.9
+    pre_build_image: true
+    privileged: true
+    command: "/sbin/init"
+provisioner:
+  name: ansible
+  inventory:
+    hosts:
+      all:
+        vars:
+          role_docker_version: "${MOLECULE_DOCKER_VERSION}"
+          role_docker_compose_version: "${MOLECULE_DOCKER_COMPOSE_VERSION}"
+          role_docker_as_service: "${MOLECULE_DOCKER_AS_SERVICE}"
+  playbooks:
+    prepare: ../resources/playbooks/prepare.yml
+    converge: ../resources/playbooks/converge.yml
+    verify: ../resources/playbooks/verify.yml
+verifier:
+  name: ansible

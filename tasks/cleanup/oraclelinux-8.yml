@@ -1,4 +1,4 @@
-- name: cleanup default docker packages
+- name: oraclelinux-8 | Cleanup default docker packages
   ansible.builtin.yum:
     state: absent
     name:
@@ -12,3 +12,4 @@
       - docker-logrotate
       - docker-engine
       - podman
+      - runc

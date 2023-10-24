@@ -1,0 +1,2 @@
+- name: debian-11 | Enable and start service
+  ansible.builtin.include_tasks: "_service.yml"

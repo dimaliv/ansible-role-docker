@@ -1,0 +1,6 @@
+- name: Converge
+  hosts: all
+  tasks:
+    - name: Execute docker role
+      ansible.builtin.include_role:
+        name: role_docker

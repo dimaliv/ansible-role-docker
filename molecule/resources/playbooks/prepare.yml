@@ -1,0 +1,15 @@
+- name: Prepare
+  hosts: all
+  tasks:
+    - name: Oracle Linux 7 prepare
+      when: >
+        ansible_distribution in ('OracleLinux') and
+        ansible_distribution_major_version == '7'
+      block:
+        - name: Install repos
+          ansible.builtin.yum:
+            update_cache: true
+            state: present
+            name:
+              - oracle-release-el7
+              - oracle-epel-release-el7

@@ -1,11 +1,4 @@
-- name: install python packages
-  tags: install, pip
-  ansible.builtin.pip:
-    name: "{{ role_docker_python_pip_requirements }}"
-  when: role_docker_python_pip_requirements is defined and
-        role_docker_python_pip_requirements | length > 0
-
-- name: ensures that directory for docker config exists | {{ role_docker_config_dir_path }}
+- name: os-prepare | Ensures that directory for docker config exists | {{ role_docker_config_dir_path }}
   tags: install,config
   ansible.builtin.file:
     path: "{{ role_docker_config_dir_path }}"
@@ -16,7 +9,7 @@
         role_docker_config_dir_mode is defined and
         role_docker_config_dir_mode | length > 0
 
-- name: ensures that directory for docker data exists | {{ role_docker_data_dir_path }}
+- name: os-prepare | Ensures that directory for docker data exists | {{ role_docker_data_dir_path }}
   tags: install,config
   ansible.builtin.file:
     path: "{{ role_docker_data_dir_path }}"

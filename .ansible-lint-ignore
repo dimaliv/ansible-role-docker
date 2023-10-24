@@ -1,0 +1,6 @@
+# ansible-lint-ignore
+
+## command-instead-of-module
+
+roles/role_docker/tasks/install/oraclelinux-7.yml command-instead-of-module # yum lock for concreat repo
+roles/role_docker/tasks/install/oraclelinux-8.yml command-instead-of-module # yum lock for concreat repo

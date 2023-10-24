@@ -1,22 +1,18 @@
----
 galaxy_info:
   namespace: dimaliv
-  role_name: docker
+  role_name: role_docker
   description: Install and config docker service.
   author: Livshits Dmitry
-  license: "license MIT"
+  license: "MIT"
   min_ansible_version: "2.7"
   platforms:
     - name: Debian
       versions:
         - bullseye
-        - buster
+        - bookworm
     - name: OracleLinux
       versions:
         - "7.9"
-        - "8.0"
-  galaxy_tags:
-    - docker
-    - docker-compose
+        - "8.8"
 
 dependencies: []

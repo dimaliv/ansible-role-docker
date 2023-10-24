@@ -1,0 +1,15 @@
+- name: oraclelinux-8 | Install packages
+  ansible.builtin.dnf:
+    update_cache: "{{ role_docker_update_package_manager_cache | bool }}"
+    state: present
+    name:
+      - python3-pip
+      - yum-plugin-versionlock
+  notify: "cleanup packages"
+
+- name: oraclelinux-8 | Install python packages
+  tags: install,pip
+  ansible.builtin.pip:
+    name: "{{ role_docker_python_pip_requirements }}"
+  when: role_docker_python_pip_requirements is defined and
+        role_docker_python_pip_requirements | length > 0

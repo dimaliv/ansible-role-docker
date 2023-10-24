@@ -1,0 +1,45 @@
+- name: oraclelinux-8 | Install docker dependencies
+  ansible.builtin.yum:
+    update_cache: "{{ role_docker_update_package_manager_cache | bool }}"
+    state: present
+    name:
+      - containerd.io
+      - docker-compose-plugin
+  notify: "cleanup packages"
+
+- name: oraclelinux-8 | Gather the packages facts
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: oraclelinux-8 | Remove lock
+  ansible.builtin.command:
+    cmd: "yum versionlock delete {{ item }} --disablerepo=\"*\" --enablerepo=\"nexus-ol8*\""
+  loop:
+    - docker-ce
+    - docker-ce-cli
+  when: >-
+    (ansible_facts.packages['docker-ce'] is defined and ansible_facts.packages['docker-ce'][0].version != role_docker_version) or
+    (ansible_facts.packages['docker-ce-cli'] is defined and ansible_facts.packages['docker-ce-cli'][0].version != role_docker_version)
+  changed_when: false
+
+- name: oraclelinux-8 | Install docker v{{ role_docker_version }}
+  ansible.builtin.yum:
+    update_cache: "{{ role_docker_update_package_manager_cache | bool }}"
+    allow_downgrade: true
+    name:
+      - docker-ce-{{ role_docker_version }}
+      - docker-ce-cli-{{ role_docker_version }}
+  notify:
+    - "restart docker service"
+    - "cleanup packages"
+
+- name: oraclelinux-8 | Prevent docker-ce and docker-ce-cli from being upgraded
+  ansible.builtin.command:
+    cmd: "yum versionlock add {{ item }} --disablerepo=\"*\" --enablerepo=\"nexus-ol8*\""
+  loop:
+    - docker-ce-{{ role_docker_version }}
+    - docker-ce-cli-{{ role_docker_version }}
+  when: >-
+    (ansible_facts.packages['docker-ce'] is defined and ansible_facts.packages['docker-ce'][0].version != role_docker_version) or
+    (ansible_facts.packages['docker-ce-cli'] is defined and ansible_facts.packages['docker-ce-cli'][0].version != role_docker_version)
+  changed_when: false

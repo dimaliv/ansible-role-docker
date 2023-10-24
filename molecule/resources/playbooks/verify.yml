@@ -1,0 +1,39 @@
+- name: Verify
+  hosts: all
+  tasks:
+    - name: Gather packages facts
+      ansible.builtin.package_facts:
+        manager: auto
+
+    - name: Assert installed docker version
+      ansible.builtin.assert:
+        that: >
+          ansible_facts.packages['docker-ce'][0].version is defined and
+          role_docker_version in ansible_facts.packages['docker-ce'][0].version
+        fail_msg: >
+          installed version docker-ce-{{ ansible_facts.packages['docker-ce'][0].version }} !=
+          requested version {{ role_docker_version }}"
+
+    - name: Assert installed docker-cli version
+      ansible.builtin.assert:
+        that: >
+          ansible_facts.packages['docker-ce-cli'][0].version is defined and
+          role_docker_version in ansible_facts.packages['docker-ce-cli'][0].version
+        fail_msg:
+          installed version docker-ce-cli-{{ ansible_facts.packages['docker-ce-cli'][0].version }} !=
+          requested version {{ role_docker_version }}
+
+    - name: Get docker-compose installed version
+      ansible.builtin.shell:
+        cmd: set -o pipefail && docker-compose --version | awk '{print $3}' | sed 's/.$//'
+        executable: /bin/bash
+      register: docker_compose_installed_version
+      changed_when: false
+
+    - name: Assert installed docker-compose version
+      ansible.builtin.assert:
+        that:
+          - docker_compose_installed_version.stdout == role_docker_compose_version
+        fail_msg: >
+          installed versions: docker-compose-{{ docker_compose_installed_version.stdout }} !=
+          requested version {{ role_docker_compose_version }}"

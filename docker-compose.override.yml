@@ -1,1 +1,9 @@
 version: "3.8"
+
+services:
+  molecule:
+    volumes:
+      - ./:/ansible/roles/role_docker
+      - ./.ansible-lint:/ansible/.ansible-lint
+      - ./.ansible-lint-ignore:/ansible/.ansible-lint-ignore
+      - ./.yamllint:/ansible/.yamllint

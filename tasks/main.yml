@@ -1,49 +1,33 @@
-- name: prepare
+- name: Cleanup default docker packages
+  tags: cleanup
+  ansible.builtin.include_tasks: cleanup/{{ ansible_distribution | lower }}-{{ ansible_distribution_major_version }}.yml
+
+- name: Prepare python and environment
   tags: prepare
-  ansible.builtin.import_tasks: prepare.yml
+  ansible.builtin.include_tasks: prepare/{{ ansible_distribution | lower }}-{{ ansible_distribution_major_version }}.yml
 
-- name: cleanup default docker packages for Debian/Ubuntu
-  tags: debian, cleanup
-  ansible.builtin.import_tasks: cleanup/debian.yml
-  when: "ansible_distribution in ('Debian', 'Ubuntu')"
+- name: Prepare OS
+  tags: prepare
+  ansible.builtin.import_tasks: os-prepare.yml
 
-- name: cleanup default docker packages for Oracle 7
-  tags: oracle, cleanup
-  ansible.builtin.import_tasks: cleanup/oracle-7.yml
-  when: >
-    ansible_distribution in ('OracleLinux', 'RedHat') and
-    ansible_distribution_major_version == '7'
+- name: Add official docker repositories
+  tags: prepare,repos
+  when: role_docker_add_official_docker_repos
+  ansible.builtin.include_tasks: repos/{{ ansible_distribution | lower }}-{{ ansible_distribution_major_version }}.yml
 
-- name: cleanup default docker packages for Oracle 8
-  tags: oracle, cleanup
-  ansible.builtin.import_tasks: cleanup/oracle-8.yml
-  when: >
-    ansible_distribution in ('OracleLinux', 'RedHat') and
-    ansible_distribution_major_version == '8'
+- name: Install docker
+  tags: install
+  ansible.builtin.include_tasks: install/{{ ansible_distribution | lower }}-{{ ansible_distribution_major_version }}.yml
 
-- name: install docker for Debian/Ubuntu
-  tags: debian, install
-  ansible.builtin.import_tasks: install/debian.yml
-  when: "ansible_distribution in ('Debian', 'Ubuntu')"
-
-- name: install docker for Oracle 7
-  tags: oracle, install
-  ansible.builtin.import_tasks: install/oracle-7.yml
-  when: >
-    ansible_distribution in ('OracleLinux', 'RedHat') and
-    ansible_distribution_major_version == '7'
-
-- name: install docker for Oracle 8
-  tags: oracle, install
-  ansible.builtin.import_tasks: install/oracle-8.yml
-  when: >
-    ansible_distribution in ('OracleLinux', 'RedHat') and
-    ansible_distribution_major_version == '8'
-
-- name: set docker daemon.json
+- name: Set docker daemon.json
   tags: configure
   ansible.builtin.import_tasks: configure/daemon.json.yml
 
-- name: install docker-compose
+- name: Install docker-compose
   tags: install, compose
   ansible.builtin.import_tasks: install/compose.yml
+
+- name: Post tasks
+  tags: install
+  when: role_docker_as_service
+  ansible.builtin.include_tasks: post_tasks/{{ ansible_distribution | lower }}-{{ ansible_distribution_major_version }}.yml

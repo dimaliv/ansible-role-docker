@@ -3,8 +3,11 @@ role_docker_compose_version: "{{ undef(hint='You must specify docker-compose ver
 role_docker_compose_dest: "/usr/local/bin/docker-compose"
 role_docker_compose_mode: "0755"
 
-role_docker_compose_url: >-
-  https://github.com/docker/compose/releases/download/{{ role_docker_compose_version }}/docker-compose-{{ ansible_system }}-{{ ansible_architecture }}
+role_docker_compose_url:
+  "https://github.com/docker/compose/releases/download/{{ role_docker_compose_version }}/\
+   docker-compose-{{ ansible_system }}-{{ ansible_architecture }}"
+
+role_docker_add_official_docker_repos: true
 
 role_docker_config_src_template: "daemon.json.j2"
 role_docker_config_dest_file_name: "daemon.json"
@@ -14,13 +17,19 @@ role_docker_config_file_mode: "0640"
 role_docker_config_dir_path: "/etc/docker"
 role_docker_config_dir_mode: "0755"
 
+role_docker_as_service: true
+role_docker_as_service_check_started: true
+role_docker_as_service_check_retries: 5
+role_docker_as_service_check_delay: 10
+role_docker_update_package_manager_cache: true
+
 role_docker_python_pip_requirements:
   - docker-compose
   - docker
   - jsondiff
   - pexpect
 
-_daemon_json: {}
+role_docker_daemon_json: {}
 
 # role_docker_data_dir_path: "/var/lib/docker"
 # role_docker_data_dir_mode: "0710"

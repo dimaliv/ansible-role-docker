@@ -1,20 +1,27 @@
-image: docker:stable
+image: docker:24
 
 services:
-  - name: docker:dind-stable
+  - name: docker:dind
     alias: docker
+
+stages:
+  - lint
+  - test
 
 before_script:
   - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" "$CI_REGISTRY" --password-stdin
 
-build_image:
-  stage: build
+lint:
+  stage: lint
   script:
-    - make target=build pull
-    - make target=build build
-    - make target=build push
+    - make lint
 
 molecule_test:
   stage: test
   script:
-    - make target=build test
+    - make run-test-ci
+  parallel:
+    matrix:
+      - ANSIBLE_VERSION: ["8"]
+        MOLECULE_DOCKER_VERSION: ["24.0.0"]
+        MOLECULE_SCENARIO: ["debian", "oraclelinux"]

@@ -1,0 +1,23 @@
+- name: oraclelinux-7 | Install packages
+  ansible.builtin.yum:
+    update_cache: "{{ role_docker_update_package_manager_cache | bool }}"
+    state: present
+    name:
+      - python-pip
+      - python-wheel
+      - python-setuptools
+      - yum-plugin-versionlock
+  notify: "cleanup packages"
+
+- name: oraclelinux-7 | Python pip upgrade
+  ansible.builtin.pip:
+    name: pip==20.3.4
+    extra_args: --upgrade
+    state: present
+
+- name: oraclelinux-7 | Install python packages
+  tags: install,pip
+  ansible.builtin.pip:
+    name: "{{ role_docker_python_pip_requirements }}"
+  when: role_docker_python_pip_requirements is defined and
+        role_docker_python_pip_requirements | length > 0

@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  molecule:
+    working_dir: /role_docker
+    command: molecule test --scenario-name=${MOLECULE_SCENARIO:-debian}
+    environment:
+      MOLECULE_DOCKER_VERSION: ${MOLECULE_DOCKER_VERSION:-24.0.0}
+      MOLECULE_DOCKER_COMPOSE_VERSION: ${MOLECULE_DOCKER_COMPOSE_VERSION:-1.29.2}
+      MOLECULE_DOCKER_AS_SERVICE: ${MOLECULE_DOCKER_AS_SERVICE:-true}
+    volumes:
+      - ./:/role_docker
+      - /var/run/docker.sock:/var/run/docker.sock

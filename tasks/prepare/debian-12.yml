@@ -1,0 +1,12 @@
+- name: debian-12 | Install python and pip dependencies
+  ansible.builtin.apt:
+    update_cache: "{{ role_docker_update_package_manager_cache | bool }}"
+    state: present
+    pkg:
+      - python3-pip
+      - python3-setuptools
+      - python3-docker
+      - python3-jsondiff
+      - python3-pexpect
+      - python3-compose
+  notify: "cleanup packages"

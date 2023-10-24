@@ -1,0 +1,28 @@
+driver:
+  name: docker
+platforms:
+  - name: debian_11
+    image: debian:11
+    pre_build_image: false
+    privileged: true
+    command: "/sbin/init"
+  - name: debian_12
+    image: debian:12
+    pre_build_image: false
+    privileged: true
+    command: "/sbin/init"
+provisioner:
+  name: ansible
+  inventory:
+    hosts:
+      all:
+        vars:
+          role_docker_version: "${MOLECULE_DOCKER_VERSION}"
+          role_docker_compose_version: "${MOLECULE_DOCKER_COMPOSE_VERSION}"
+          role_docker_as_service: "${MOLECULE_DOCKER_AS_SERVICE}"
+  playbooks:
+    prepare: ../resources/playbooks/prepare.yml
+    converge: ../resources/playbooks/converge.yml
+    verify: ../resources/playbooks/verify.yml
+verifier:
+  name: ansible

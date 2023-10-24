@@ -1,0 +1,2 @@
+- name: debian-12 | Install
+  ansible.builtin.include_tasks: debian-11.yml
